@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include "vector.h"
+#include "util/vector.h"
 
 /**
  * A simple token.
@@ -21,6 +21,6 @@ typedef struct Token
 
 /**
  * Converting a string to a list of tokens
- * @param input 
+ * @param input
  */
 vector *tokenize(char input[]);

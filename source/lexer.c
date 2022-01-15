@@ -27,20 +27,32 @@ vector *tokenize(char code[])
             continue;
         }
 
-        // Skipping strings
+        // Strings
         if (*p == '"')
         {
-            char *str = p + 1;
-            while (*p != '"')
-                p++;
+            char *start = p;
             p++;
-            char *value = malloc(p - str);
-            strncpy(value, str, p - str);
-            value[p - str] = '\0';
-            Token *t = malloc(sizeof(Token));
-            t->value = value;
-            t->type = TOKEN_STRING;
-            push_back(tokens, t);
+
+            while (*p != '"')
+            {
+                if (*p == '\0')
+                    error("Unterminated string");
+
+                p++;
+            }
+
+            char *value = malloc(p - start + 1);
+            strncpy(value, start, p - start);
+            value[p - start] = '\0';
+
+            struct Token *token = malloc(sizeof(struct Token));
+            token->type = TOKEN_STRING;
+
+            token->value = value;
+
+            push_back(tokens, token);
+
+            p++;
             continue;
         }
 

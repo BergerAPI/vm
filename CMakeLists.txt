@@ -2,4 +2,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project(vm)
 
-add_executable(${PROJECT_NAME} source/lexer.c source/vm.c source/main.c source/vector.c)
+# Getting every file recursively in the source directory
+file(GLOB_RECURSE SRCS ./source/*.c)
+
+add_executable(${PROJECT_NAME} ${SRCS})
