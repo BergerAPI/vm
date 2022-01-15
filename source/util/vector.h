@@ -33,6 +33,12 @@ void *vector_at(vector *v, int index);
 void push_back(vector *v, void *element);
 
 /**
+ * Removing the top element from the vector.
+ * @param v 
+ */
+void *vector_pop(vector *v);
+
+/**
  * Clearing the vector.
  * @param v 
  */

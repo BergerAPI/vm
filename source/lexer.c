@@ -8,19 +8,19 @@ vector *tokenize(char code[])
     char *p = code;
     while (*p != '\0')
     {
-        // Skipping whitespace
+        // Whitespace
         while (*p == ' ' || *p == '\t')
             p++;
 
-        // Skipping comments
-        if (*p == '#')
+        // Comments
+        if (*p == ';')
         {
             while (*p != '\n')
                 p++;
             continue;
         }
 
-        // Skipping newlines
+        // Newlines
         if (*p == '\n')
         {
             p++;
@@ -56,7 +56,7 @@ vector *tokenize(char code[])
             continue;
         }
 
-        // Skipping numbers
+        // Numbers
         if (*p >= '0' && *p <= '9')
         {
             char *num = p;
@@ -72,7 +72,7 @@ vector *tokenize(char code[])
             continue;
         }
 
-        // Skipping identifiers
+        // Identifiers
         if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z') || *p == '_')
         {
             char *id = p;
@@ -85,6 +85,28 @@ vector *tokenize(char code[])
             t->value = value;
             t->type = TOKEN_IDENTIFIER;
             push_back(tokens, t);
+            continue;
+        }
+
+        // Colon
+        if (*p == ':')
+        {
+            Token *t = malloc(sizeof(Token));
+            t->value = ":";
+            t->type = TOKEN_COLON;
+            push_back(tokens, t);
+            p++;
+            continue;
+        }
+
+        // Comma
+        if (*p == ',')
+        {
+            Token *t = malloc(sizeof(Token));
+            t->value = ",";
+            t->type = TOKEN_COMMA;
+            push_back(tokens, t);
+            p++;
             continue;
         }
     }

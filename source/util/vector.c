@@ -27,6 +27,16 @@ void free_vector(vector *v)
     free(v);
 }
 
+void *vector_pop_back(vector *v)
+{
+    if (v->size == 0)
+    {
+        error("vector_pop_back: stack underflow\n");
+    }
+
+    return v->data[--v->size];
+}
+
 vector *vector_new(size_t initial_size)
 {
     vector *v = (vector *)malloc(sizeof(vector));

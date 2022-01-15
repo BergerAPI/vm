@@ -1,3 +1,4 @@
+#pragma once
 
 /**
  * Throwing an error and stopping the program.
