@@ -20,7 +20,9 @@
 #define BRT_INST 9
 #define BRF_INST 10
 #define SYS_INST 11
-#define HALT_INST 12
+#define LOAD_INST 12
+#define GLOAD_INST 13
+#define STORE_INST 14
 
 typedef struct Instruction
 {

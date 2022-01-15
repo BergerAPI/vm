@@ -77,10 +77,56 @@ void run(VirtualMachine *vm, vector *labels)
                     vm->stack[vm->sp++] = vm->stack[--vm->sp] - vm->stack[--vm->sp];
                     break;
                 case IMUL_INST:
-                    log_error("IMUL: Not implemented");
+                    // Checking if we have an stack underflow
+                    if (vm->sp < 2)
+                    {
+                        log_error("ISUB: Stack underflow");
+                    }
+
+                    vm->stack[vm->sp++] = vm->stack[--vm->sp] * vm->stack[--vm->sp];
                     break;
                 case IDIV_INST:
-                    log_error("IDIV: Not implemented");
+                    // Checking if we have an stack underflow
+                    if (vm->sp < 2)
+                    {
+                        log_error("ISUB: Stack underflow");
+                    }
+
+                    vm->stack[vm->sp++] = vm->stack[--vm->sp] / vm->stack[--vm->sp];
+                    break;
+
+                case LOAD_INST:
+                    // Checking if we have an stack underflow
+                    if (vm->sp < 1)
+                    {
+                        log_error("LOAD: Stack underflow");
+                    }
+
+                    // Checking if we even have a variable with the given name
+                    if (inst->operand >= DEFAULT_HEAP_SIZE)
+                    {
+                        log_error("LOAD: Variable does not exist");
+                    }
+
+                    vm->stack[vm->sp++] = vm->heap[inst->operand];
+
+                    break;
+
+                case STORE_INST:
+                    // Checking if we have an stack underflow
+                    if (vm->sp < 1)
+                    {
+                        log_error("STORE: Stack underflow");
+                    }
+
+                    // Checking if we even have a variable with the given name
+                    if (inst->operand >= DEFAULT_HEAP_SIZE)
+                    {
+                        log_error("STORE: Variable does not exist");
+                    }
+
+                    vm->heap[inst->operand] = vm->stack[--vm->sp];
+
                     break;
                 case SYS_INST:
 
@@ -106,9 +152,6 @@ void run(VirtualMachine *vm, vector *labels)
                         break;
                     }
 
-                    break;
-                case HALT_INST:
-                    log_info("HALT: Program halted");
                     break;
                 default:
                     log_error("Unknown opcode: %d", inst->opcode);
@@ -141,8 +184,12 @@ int get_op_code(char *c)
         return IMUL_INST;
     else if (strcmp(c, "div") == 0)
         return IDIV_INST;
-    else if (strcmp(c, "halt") == 0)
-        return HALT_INST;
+    else if (strcmp(c, "load") == 0)
+        return LOAD_INST;
+    else if (strcmp(c, "gload") == 0)
+        return GLOAD_INST;
+    else if (strcmp(c, "store") == 0)
+        return STORE_INST;
     else if (strcmp(c, "syscall") == 0)
         return SYS_INST;
     else
