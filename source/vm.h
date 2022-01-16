@@ -19,8 +19,10 @@
 #define OP_MUL 3
 #define OP_DIV 4
 #define OP_MOD 5
-#define OP_JE 6
-#define OP_JNE 7
+#define OP_PUSH 6
+#define OP_POP 7
+#define OP_JE 8
+#define OP_JNE 9
 
 /**
  * @brief A simple assembly instruction to tell the virtual machine what to do
@@ -91,3 +93,17 @@ void write_memory(Virtual_Machine *vm, int address, UINT16 value);
  * @param vm the virtual machine to run
  */
 void run_vm(Virtual_Machine *vm, std::vector<Instruction> instructions);
+
+/**
+ * @brief Running exactly one instruction
+ * 
+ * @param vm the machine
+ * @param instruction the instruction to run
+ */
+void step_vm(Virtual_Machine *vm, Instruction *instruction);
+
+/**
+ * @brief Logging all registers
+ * @param vm the vm from which to get the registers
+ */
+void log_registers(Virtual_Machine *vm);
