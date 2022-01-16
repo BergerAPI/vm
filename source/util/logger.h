@@ -1,22 +1,27 @@
 #pragma once
 
-/**
- * Throwing an error and stopping the program.
- * @param msg
- * @param ...
- */
-void log_error(char *msg, ...);
+#define DEBUG 1
 
 /**
- * Debugging message which will be printed only if the DEBUG flag is set.
- * @param msg
- * @param ...
+ * @brief Basically throwing an error
+ * 
+ * @param format 
+ * @param ... 
  */
-void log_debug(char *msg, ...);
+void log_error(const char *format, ...);
 
 /**
- * Logging some informations.
- * @param msg
- * @param ...
+ * @brief Debug messsages, only shown if DEBUG is defined
+ * 
+ * @param format 
+ * @param ... 
  */
-void log_info(char *msg, ...);
+void log_debug(const char *format, ...);
+
+/**
+ * @brief Logging basic informations
+ * 
+ * @param format 
+ * @param ... 
+ */
+void log_info(const char *format, ...);
