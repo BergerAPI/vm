@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memory.h"
+#include <map>
 
 #define MAX_STACK_SIZE 1024
 #define REGISTER_COUNT 7
@@ -24,6 +25,7 @@
 #define OP_JE 8
 #define OP_JNE 9
 
+#define ENTRY_POINT "_main"
 /**
  * @brief A simple assembly instruction to tell the virtual machine what to do
  */
@@ -36,13 +38,22 @@ typedef struct Instruction
 } Instruction;
 
 /**
+ * @brief A basic label that can be used to jump to a specific instruction
+ */
+typedef struct Label
+{
+    UINT16 address;
+
+    std::string name;
+    std::vector<Instruction> instructions;
+} Label;
+
+/**
  * @brief Thats the struct which stores all the information about the virtual machine
  */
 typedef struct Virtual_Machine
 {
     UINT16 *memory;
-
-    std::vector<Instruction> instructions;
 
     UINT16 registers[REGISTER_COUNT];
     UINT16 stack[MAX_STACK_SIZE];
@@ -92,7 +103,7 @@ void write_memory(Virtual_Machine *vm, int address, UINT16 value);
  * @brief Running the virtual machine
  * @param vm the virtual machine to run
  */
-void run_vm(Virtual_Machine *vm, std::vector<Instruction> instructions);
+void run_vm(Virtual_Machine *vm, std::vector<Label> labels);
 
 /**
  * @brief Running exactly one instruction
@@ -100,7 +111,7 @@ void run_vm(Virtual_Machine *vm, std::vector<Instruction> instructions);
  * @param vm the machine
  * @param instruction the instruction to run
  */
-void step_vm(Virtual_Machine *vm, Instruction *instruction);
+void step_vm(Virtual_Machine *vm, std::vector<Label> labels);
 
 /**
  * @brief Logging all registers

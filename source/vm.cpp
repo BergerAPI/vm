@@ -56,24 +56,59 @@ void log_registers(Virtual_Machine *vm)
         log_debug("%d: %d", i, vm->registers[i]);
 }
 
-void run_vm(Virtual_Machine *vm, std::vector<Instruction> instructions)
+void run_vm(Virtual_Machine *vm, std::vector<Label> labels)
 {
-    vm->instructions = instructions;
+    bool found_entry = false;
 
-    UINT16 ip = get_register(vm, IP);
-    UINT16 instr_size = instructions.size();
-
-    log_debug("Starting VM, Instructions: %d, ip = %d", instr_size, ip);
-
-    while (ip < instr_size)
+    // Finding the entry point
+    for (int i = 0; i < labels.size(); i++)
     {
-        step_vm(vm, &vm->instructions[ip]);
-        write_register(vm, IP, ++ip);
+        Label *label = &labels[i];
+
+        if (label->name == ENTRY_POINT)
+        {
+            if (found_entry)
+                log_error("Error: multiple entry points found");
+
+            UINT16 ip = get_register(vm, IP);
+            UINT16 instr_size = label->instructions.size();
+
+            log_debug("Starting VM, Instructions: %d, ip = %d", instr_size, ip);
+
+            while (ip < instr_size)
+            {
+                step_vm(vm, labels);
+                write_register(vm, IP, ++ip);
+            }
+
+            found_entry = true;
+        }
     }
+
+    if (!found_entry)
+        log_error("Error: entry point not found");
 }
 
-void step_vm(Virtual_Machine *vm, Instruction *instruction)
+void step_vm(Virtual_Machine *vm, std::vector<Label> labels)
 {
+    // Flattining the instructions
+    std::vector<Instruction> instructions;
+
+    for (int i = 0; i < labels.size(); i++)
+    {
+        Label *label = &labels[i];
+
+        for (int j = 0; j < label->instructions.size(); j++)
+            instructions.push_back(label->instructions[j]);
+    }
+
+    UINT16 ip = get_register(vm, IP);
+
+    if (ip >= instructions.size())
+        log_error("Error: instruction pointer out of range");
+
+    Instruction *instruction = &instructions[ip];
+
     switch (instruction->opcode)
     {
     case OP_MOV:
