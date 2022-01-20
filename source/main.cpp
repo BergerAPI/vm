@@ -32,6 +32,7 @@ void wait_for_input(Virtual_Machine *vm, std::vector<Label> labels)
     }
     else if (input == "run")
     {
+        write_register(vm, IP, 0);
         run_vm(vm, labels);
         exit(EXIT_SUCCESS);
     }
@@ -60,11 +61,10 @@ int main(int argc, char *argv[])
     _main.push_back({OP_ADD, R1, R2});
     _main.push_back({OP_MOV, R2, 3});
     _main.push_back({OP_SUB, ACC, R2});
+    _main.push_back({OP_INT, 0x01, 0});
 
-    // Adding the main entry point ("_main")
     labels.push_back({0, ENTRY_POINT, _main});
 
-    // Waiting for input
     wait_for_input(vm, labels);
 
     return 0;

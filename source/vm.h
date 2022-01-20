@@ -24,6 +24,7 @@
 #define OP_POP 7
 #define OP_JE 8
 #define OP_JNE 9
+#define OP_INT 10
 
 #define ENTRY_POINT "_main"
 /**
@@ -49,7 +50,7 @@ typedef struct Label
 } Label;
 
 /**
- * @brief Thats the struct which stores all the information about the virtual machine
+ * @brief That's the struct which stores all the information about the virtual machine
  */
 typedef struct Virtual_Machine
 {
